@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ZYPHERON RECRUTEMENT - Élite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* style only */
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0000, #1a0101);
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #fff4e0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* animated blood rain / particles */
+        .blood-particle {
+            position: fixed;
+            top: -10px;
+            background: rgba(180, 20, 20, 0.7);
+            border-radius: 50%;
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: 9999;
+            animation: fall linear infinite;
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        /* animated red glow edges */
+        .glow-edge {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            border: 2px solid rgba(255, 0, 50, 0.2);
+            box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.3);
+            z-index: 9998;
+        }
+
+        header {
+            text-align: center;
+            padding: 28px 15px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            border-bottom: 3px solid #ff2a2a;
+            box-shadow: 0 0 35px #ff2a2a, inset 0 0 8px rgba(255, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+            letter-spacing: 3px;
+            text-shadow: 0 0 12px #ff0000, 0 0 25px #b10000;
+            animation: pulseRed 1.8s infinite;
+        }
+
+        @keyframes pulseRed {
+            0% { text-shadow: 0 0 5px red; }
+            100% { text-shadow: 0 0 25px #ff4d4d, 0 0 8px darkred; }
+        }
+
+        .music-bar {
+            background: #1e0505cc;
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ff4444;
+            backdrop-filter: blur(8px);
+        }
+
+        .music-bar button {
+            background: #d40000;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 12px red;
+            font-size: 1rem;
+        }
+
+        .music-bar button:hover {
+            background: #ff2a2a;
+            transform: scale(1.03);
+            box-shadow: 0 0 20px #ff5555;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 35px 0 20px;
+            color: #ff4d4d;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 2px;
+            border-left: 5px solid red;
+            border-right: 5px solid red;
+            display: inline-block;
+            width: auto;
+            padding: 0 25px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1c0a0a, #0d0202);
+            width: 320px;
+            border-radius: 32px;
+            padding: 18px 15px;
+            border: 1px solid #c0392b;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,0,0.15), transparent);
+            transform: rotate(25deg);
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #ff6666;
+            box-shadow: 0 0 28px #ff2a2a;
+        }
+
+        .card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff3333;
+            box-shadow: 0 0 12px darkred;
+        }
+
+        .card-content {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .info h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .verified-badge {
+            background: #1DA1F2;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 0 8px cyan;
+        }
+
+        .pending-badge {
+            background: #ff8c00;
+            color: #1a1a1a;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            background: #222;
+            border: 1px solid red;
+            padding: 8px 12px;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+
+        .admin-btn.approve {
+            background: #0f7b0f;
+            border-color: #00ff88;
+        }
+
+        .admin-btn.reject {
+            background: #5a1e1e;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 40px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+
+        .form {
+            background: #0a0202cc;
+            backdrop-filter: blur(12px);
+            padding: 28px 20px;
+            border-radius: 45px;
+            margin: 30px 20px;
+            border: 1px solid #ff4d4d;
+            text-align: center;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 35px rgba(255,0,0,0.3);
+        }
+
+        .form input {
+            width: 90%;
+            margin: 12px 0;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: none;
+            background: #2c0f0f;
+            color: white;
+            font-weight: bold;
+            outline: none;
+            border: 1px solid #a13232;
+        }
+
+        .form button {
+            background: #e63946;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.2s;
+            box-shadow: 0 0 15px red;
+        }
+
+        .form button:hover {
+            background: #ff1a1a;
+            transform: scale(1.02);
+        }
+
+        footer {
+            background: #0a0000e6;
+            backdrop-filter: blur(10px);
+            padding: 30px 15px;
+            text-align: center;
+            border-top: 2px solid #ff2a2a;
+            margin-top: 30px;
+        }
+
+        .group-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .group-card {
+            background: #2c0f0f;
+            border-radius: 30px;
+            padding: 12px 20px;
+            width: 220px;
+            border: 1px solid red;
+            transition: 0.2s;
+        }
+
+        .group-card a {
+            color: #ffbb88;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+        }
+
+        .group-card:hover {
+            background: #4a1a1a;
+            transform: scale(1.02);
+        }
+
+        .admin-panel {
+            background: #1f0707d9;
+            border-radius: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid crimson;
+        }
+
+        .admin-code-input {
+            background: black;
+            border: 1px solid red;
+            padding: 8px 12px;
+            border-radius: 30px;
+            color: white;
+            width: 140px;
+            text-align: center;
+        }
+
+        .unlock-btn {
+            background: #b91c1c;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: none;
+            color: white;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .admin-zone {
+            display: none;
+            margin-top: 20px;
+            background: #200a0a;
+            padding: 12px;
+            border-radius: 40px;
+        }
+
+        .recruit-item {
+            background: #331010;
+            margin: 12px;
+            padding: 15px;
+            border-radius: 35px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .overlay-success {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00c853;
+            padding: 14px 28px;
+            border-radius: 60px;
+            color: black;
+            font-weight: bold;
+            z-index: 9999;
+            opacity: 0;
+            transition: 0.4s;
+            pointer-events: none;
+            box-shadow: 0 0 30px #00ffaa;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeGlow {
+            0% { opacity: 0; transform: translateX(-50%) scale(0.9);}
+            20% { opacity: 1; transform: translateX(-50%) scale(1.1);}
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.9);}
+        }
+
+        .small-note {
+            font-size: 0.7rem;
+            color: #ffa6a6;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .card { width: 90%; }
+            .section-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-edge"></div>
+<header>
+    <h1>🔥 FAMILLY ZYPHERON 🔥</h1>
+    <p style="letter-spacing:1px;">Recrutement Élite — Code Admin : 2211</p>
+</header>
+
+<div class="music-bar">
+    <p>🎧 Hymne de guerre 🔥</p>
+    <audio id="bgmusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+    <button onclick="toggleMusic()">⏵ Lancer / Couper</button>
+</div>
+
+<div style="text-align: center; margin: 5px 0;">
+    <span style="background: #b30000; padding: 4px 16px; border-radius: 50px; font-size: 0.8rem;">⚡ approbation obligatoire par l'admin ⚡</span>
+</div>
+
+<h2 class="section-title" style="display: block; text-align: center;">👑 MEMBRES CERTIFIÉS</h2>
+<div class="container" id="membersContainer"></div>
+
+<!-- PANEL ADMIN (avec code 2211) -->
+<div class="admin-panel">
+    <div>
+        <span>🔐 Accès Commandant : </span>
+        <input type="password" id="adminCode" class="admin-code-input" placeholder="code 2211">
+        <button class="unlock-btn" onclick="unlockAdmin()">Déverrouiller</button>
+    </div>
+    <div id="adminZone" class="admin-zone">
+        <h3 style="color:#ff6666;">⚔️ Gestion des recrues ⚔️</h3>
+        <div id="pendingRequestsList"></div>
+        <p class="small-note">✅ Approuver = badge vérifié + accès WhatsApp direct pour le membre</p>
+    </div>
+</div>
+
+<!-- FORMULAIRE D'INSCRIPTION (demande) -->
+<div class="form">
+    <h3>📝 FORMULAIRE DE RECRUTEMENT</h3>
+    <input type="text" id="recruitName" placeholder="Pseudo / Nom de guerre" autocomplete="off">
+    <input type="text" id="clanTag" placeholder="Tag ZYPHERON (ex: Zyph_Shadow)">
+    <input type="file" id="recruitPhoto" accept="image/*">
+    <button onclick="submitRecruitment()">🔥 SOUMETTRE MA CANDIDATURE 🔥</button>
+    <p class="small-note">L'admin examinera ta demande. Une fois approuvé(e), ton profil s'affichera avec le badge certifié + lien direct vers le soutien.</p>
+</div>
+
+<!-- FOOTER + GROUPES WHATSAPP -->
+<footer>
+    <h3 style="color:#ff4444;">🌐 CANAUX OFFICIELS</h3>
+    <div class="group-links">
+        <div class="group-card">
+            <a href="https://chat.whatsapp.com/FChwYx3MpiX1INrGohs32z?mode=gi_t" target="_blank">🔥 Premier Bataillon</a>
+        </div>
+        <div class="group-card">
+            <a href="https://chat.whatsapp.com/BxoWBg7e5BaGk3tE3vHAxU?mode=gi_t" target="_blank">⚔️ Second Régiment</a>
+        </div>
+        <div class="group-card">
+            <a href="https://whatsapp.com/channel/0029Vb7SUonEQIakXjOf7h3V" target="_blank">📢 Chaîne Officielle</a>
+        </div>
+    </div>
+    <p style="margin-top: 10px;">📞 Contact commandement : <strong style="color:#ff8888;">+923108743476</strong></p>
+    <p style="font-size: 12px; opacity:0.7;">Système de vérification admin • code: 2211</p>
+</footer>
+
+<div id="successToast" class="overlay-success">✅ Opération approuvée</div>
+
+<script>
+    // ---------- STORAGE ----------
+    let pendingRecruits = JSON.parse(localStorage.getItem("zyphPending")) || [];
+    let approvedMembers = JSON.parse(localStorage.getItem("zyphApproved")) || [];
+
+    // Helper DOM
+    function showMessage(msg, isError = false) {
+        let toast = document.getElementById("successToast");
+        toast.style.backgroundColor = isError ? "#b00020" : "#00c853";
+        toast.innerText = isError ? "❌ " + msg : "✅ " + msg;
+        toast.style.opacity = "1";
+        toast.style.animation = "fadeGlow 2s forwards";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.animation = "";
+        }, 2000);
+    }
+
+    // Soumettre la demande (recrue)
+    window.submitRecruitment = function() {
+        let name = document.getElementById("recruitName").value.trim();
+        let tag = document.getElementById("clanTag").value.trim();
+        let file = document.getElementById("recruitPhoto").files[0];
+
+        if(!name || !tag || !file) {
+            showMessage("Remplis tous les champs (pseudo, tag, photo) !", true);
+            return;
+        }
+
+        if(name.toLowerCase() !== tag.toLowerCase().split("_")[0]?.toLowerCase() && !tag.toLowerCase().includes(name.toLowerCase())) {
+            // règle simple mais flexible pour le style famille
+            if(!confirm("Ton pseudo doit correspondre à ton tag (ex: 'Shadow' & 'Zyph_Shadow'). Continuer quand même ?")) {
+                return;
+            }
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let newRecruit = {
+                id: Date.now(),
+                name: name,
+                clanTag: tag,
+                photo: e.target.result,
+                timestamp: Date.now(),
+                status: "pending",
+                verified: false
+            };
+            pendingRecruits.push(newRecruit);
+            localStorage.setItem("zyphPending", JSON.stringify(pendingRecruits));
+            showMessage("Demande envoyée ! L'admin jugera ta valeur.");
+            document.getElementById("recruitName").value = "";
+            document.getElementById("clanTag").value = "";
+            document.getElementById("recruitPhoto").value = "";
+            if(adminUnlocked) renderPendingPanel();
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // Afficher membres approuvés
+    function displayApprovedMembers() {
+        const container = document.getElementById("membersContainer");
+        if(!container) return;
+        container.innerHTML = "";
+        if(approvedMembers.length === 0) {
+            container.innerHTML = `<div style="text-align:center; width:100%; color:#aaa;">Aucun membre certifié pour l'instant. Rejoignez-nous !</div>`;
+            return;
+        }
+        approvedMembers.forEach(member => {
+            const card = document.createElement("div");
+            card.className = "card";
+            let hoursSince = Math.floor((Date.now() - member.timestamp) / 3600000);
+            let timeText = hoursSince + "h au service";
+            
+            card.innerHTML = `
+                <div class="card-content">
+                    <img src="${member.photo}" alt="avatar">
+                    <div class="info">
+                        <h3>${escapeHtml(member.name)} <span class="verified-badge">✔ CERTIFIÉ</span></h3>
+                        <div style="font-size:12px; color:#ff8888;">${member.clanTag}</div>
+                        <div style="font-size:11px; opacity:0.7;">👑 ${timeText}</div>
+                    </div>
+                </div>
+                <div class="status">
+                    <span style="color:#00ffaa;">🔰 Guerrier actif</span>
+                    <button class="whatsapp-btn" onclick="contactLeader('${member.name}')">📞 CONTACTER COMMANDANT</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // contacter le numéro officiel (bouton wa)
+    window.contactLeader = function(name) {
+        let phone = "923108743476"; // numéro officiel
+        let msg = `Salut Commandant! Je suis ${name} (ZYPHERON certifié) 🔥`;
+        let url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+    };
+
+    // admin part
+    let adminUnlocked = false;
+    function unlockAdmin() {
+        let code = document.getElementById("adminCode").value;
+        if(code === "2211") {
+            adminUnlocked = true;
+            document.getElementById("adminZone").style.display = "block";
+            renderPendingPanel();
+            showMessage("Accès admin accordé. Tu peux gérer les demandes.");
+        } else {
+            showMessage("Code incorrect !", true);
+            adminUnlocked = false;
+        }
+    }
+
+    function renderPendingPanel() {
+        const pendingDiv = document.getElementById("pendingRequestsList");
+        if(!pendingDiv) return;
+        if(pendingRecruits.length === 0) {
+            pendingDiv.innerHTML = `<div style="padding:15px;">Aucune demande en attente. 🔥</div>`;
+            return;
+        }
+        pendingDiv.innerHTML = "";
+        pendingRecruits.forEach((req, idx) => {
+            let timeAgo = Math.floor((Date.now() - req.timestamp) / 60000);
+            let timeText = timeAgo < 60 ? timeAgo + " min" : Math.floor(timeAgo/60) + "h";
+            const reqDiv = document.createElement("div");
+            reqDiv.className = "recruit-item";
+            reqDiv.innerHTML = `
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <img src="${req.photo}" width="48" height="48" style="border-radius:50%; border:1px solid red;">
+                    <div>
+                        <strong>${escapeHtml(req.name)}</strong> <span style="font-size:12px;">${escapeHtml(req.clanTag)}</span><br>
+                        <span style="font-size:11px;">⏱️ ${timeText}</span>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="admin-btn approve" onclick="approveMember(${req.id})">✅ Approuver</button>
+                    <button class="admin-btn reject" onclick="rejectMember(${req.id})">❌ Rejeter</button>
+                </div>
+            `;
+            pendingDiv.appendChild(reqDiv);
+        });
+    }
+
+    window.approveMember = function(id) {
+        let index = pendingRecruits.findIndex(r => r.id === id);
+        if(index !== -1) {
+            let approved = pendingRecruits[index];
+            approved.verified = true;
+            approved.status = "approved";
+            // ajouter aux membres approuvés
+            approvedMembers.push({
+                id: approved.id,
+                name: approved.name,
+                clanTag: approved.clanTag,
+                photo: approved.photo,
+                timestamp: approved.timestamp,
+                verified: true
+            });
+            localStorage.setItem("zyphApproved", JSON.stringify(approvedMembers));
+            // supprimer des pending
+            pendingRecruits.splice(index,1);
+            localStorage.setItem("zyphPending", JSON.stringify(pendingRecruits));
+            displayApprovedMembers();
+            if(adminUnlocked) renderPendingPanel();
+            showMessage(`${approved.name} est désormais certifié !`);
+        }
+    };
+
+    window.rejectMember = function(id) {
+        let idx = pendingRecruits.findIndex(r => r.id === id);
+        if(idx !== -1) {
+            let nameRej = pendingRecruits[idx].name;
+            pendingRecruits.splice(idx,1);
+            localStorage.setItem("zyphPending", JSON.stringify(pendingRecruits));
+            if(adminUnlocked) renderPendingPanel();
+            showMessage(`Demande de ${nameRej} rejetée.`, true);
+        }
+    };
+
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // background blood rain animation (rouge incroyable)
+    function createBloodRain() {
+        setInterval(() => {
+            let particle = document.createElement("div");
+            particle.classList.add("blood-particle");
+            let size = Math.random() * 8 + 4;
+            particle.style.width = size + "px";
+            particle.style.height = size + "px";
+            particle.style.left = Math.random() * 100 + "%";
+            particle.style.animationDuration = Math.random() * 4 + 2 + "s";
+            particle.style.opacity = Math.random() * 0.6 + 0.2;
+            particle.style.backgroundColor = `rgba(200, 20, 20, ${Math.random() * 0.5 + 0.3})`;
+            document.body.appendChild(particle);
+            setTimeout(() => { if(particle && particle.remove) particle.remove(); }, 5000);
+        }, 180);
+    }
+    createBloodRain();
+
+    // musique
+    let music = document.getElementById("bgmusic");
+    let musicStarted = false;
+    function toggleMusic() {
+        if(!musicStarted) {
+            music.play().catch(e=>console.log);
+            musicStarted = true;
+        } else {
+            if(music.paused) music.play();
+            else music.pause();
+        }
+    }
+    // premier clic global auto lancement (user gesture friendly)
+    document.body.addEventListener("click", function initMusic() {
+        if(!musicStarted) {
+            music.play().catch(e=>{});
+            musicStarted = true;
+        }
+    }, { once: true });
+
+    // auto refresh des heures dynamiques (pas obligatoire mais on rafraichit affichage)
+    setInterval(() => {
+        displayApprovedMembers();
+    }, 60000);
+    
+    // initial load
+    displayApprovedMembers();
+    // tentative d'affichage admin si déja unlock par session (reset)
+    if(localStorage.getItem("tempAdmin") === "true") {
+        adminUnlocked = true;
+        document.getElementById("adminZone").style.display = "block";
+        renderPendingPanel();
+    }
+    window.unlockAdmin = function() {
+        let code = document.getElementById("adminCode").value;
+        if(code === "2211") {
+            adminUnlocked = true;
+            localStorage.setItem("tempAdmin","true");
+            document.getElementById("adminZone").style.display = "block";
+            renderPendingPanel();
+            showMessage("Mode Admin activé");
+        } else showMessage("Code invalide", true);
+    };
+    if(adminUnlocked) renderPendingPanel();
+</script>
+</body>
+</html>
