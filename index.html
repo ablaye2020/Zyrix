@@ -18,7 +18,6 @@
             overflow-x: hidden;
         }
 
-        /* FOND MYSTIQUE SOMBRE */
         .mystic-bg {
             position: fixed;
             top: 0;
@@ -47,7 +46,6 @@
             100% { transform: translate(3%, 2%) scale(1.08); opacity: 0.9; }
         }
 
-        /* PARTICULES MYSTIQUES */
         .mystic-dust {
             position: fixed;
             width: 100%;
@@ -67,7 +65,6 @@
             100% { transform: translateY(-70px) translateX(40px); opacity: 0.5; }
         }
 
-        /* HEADER */
         .elite-header {
             text-align: center;
             padding: 35px 20px;
@@ -96,7 +93,6 @@
             font-size: 0.9rem;
         }
 
-        /* MUSIC BAR */
         .music-section {
             background: #13060ccc;
             backdrop-filter: blur(12px);
@@ -121,7 +117,6 @@
             box-shadow: 0 0 20px #ff4d8c;
         }
 
-        /* SECTION TITLE */
         .title-glow {
             text-align: center;
             margin: 45px 0 20px;
@@ -140,7 +135,6 @@
             box-shadow: 0 0 18px rgba(180, 40, 80, 0.4);
         }
 
-        /* GRILLE MEMBRES CERTIFIÉS */
         .elite-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -217,7 +211,6 @@
             color: white;
         }
 
-        /* FORMULAIRE MYSTIQUE */
         .form-dark {
             background: #13070ed9;
             backdrop-filter: blur(16px);
@@ -267,7 +260,6 @@
             transform: scale(1.01);
         }
 
-        /* PANEL ADMIN CACHÉ */
         .admin-lock-secret {
             position: fixed;
             bottom: 22px;
@@ -289,7 +281,9 @@
             position: fixed;
             bottom: 85px;
             right: 22px;
-            width: 350px;
+            width: 380px;
+            max-height: 500px;
+            overflow-y: auto;
             background: #14070ed9;
             backdrop-filter: blur(20px);
             border-radius: 32px;
@@ -320,6 +314,7 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
+            margin: 3px;
         }
         .reject-mystic {
             background: #9b2a4a;
@@ -329,9 +324,9 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
+            margin: 3px;
         }
 
-        /* FOOTER */
         .footer-purge {
             background: #0c0408e0;
             padding: 35px 20px;
@@ -425,7 +420,7 @@
 <div class="admin-lock-secret">
     <div class="admin-lock-btn" onclick="openAdminMystic()">🔐 ACCÈS GARDIEN</div>
     <div id="adminMysticPanel" class="admin-panel-mystic">
-        <h4 style="color:#e6678a;">📜 DEMANDES EN ATTENTE</h4>
+        <h4 style="color:#e6678a; margin-bottom:15px;">📜 DEMANDES EN ATTENTE</h4>
         <div id="pendingRequestsList">Chargement...</div>
     </div>
 </div>
@@ -433,7 +428,7 @@
 <div id="toastMsg" class="toast-mystic">✔ Action réussie</div>
 
 <script>
-    // STORAGE
+    // ========== DONNÉES ==========
     let pendingRequests = JSON.parse(localStorage.getItem("zyph_pending_mystic")) || [];
     let approvedMembers = JSON.parse(localStorage.getItem("zyph_approved_mystic")) || [];
 
@@ -522,6 +517,7 @@
             const ago = mins < 60 ? mins + "min" : Math.floor(mins / 60) + "h";
             const div = document.createElement("div");
             div.className = "pending-mystic-item";
+            div.setAttribute("data-req-id", req.id);
             div.innerHTML = `
                 <div style="display:flex; gap:10px; align-items:center;">
                     <img src="${req.photo}" width="48" height="48" style="border-radius:50%; border:2px solid #e6678a;">
@@ -537,18 +533,28 @@
             `;
             container.appendChild(div);
         });
+
+        // Attacher les événements après avoir créé les éléments
         document.querySelectorAll(".approve-mystic").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                let id = parseInt(btn.getAttribute("data-id"));
-                approveRequest(id);
-            });
+            btn.removeEventListener("click", handleApprove);
+            btn.addEventListener("click", handleApprove);
         });
         document.querySelectorAll(".reject-mystic").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                let id = parseInt(btn.getAttribute("data-id"));
-                rejectRequest(id);
-            });
+            btn.removeEventListener("click", handleReject);
+            btn.addEventListener("click", handleReject);
         });
+    }
+
+    function handleApprove(e) {
+        e.stopPropagation();
+        let id = parseInt(e.currentTarget.getAttribute("data-id"));
+        approveRequest(id);
+    }
+
+    function handleReject(e) {
+        e.stopPropagation();
+        let id = parseInt(e.currentTarget.getAttribute("data-id"));
+        rejectRequest(id);
     }
 
     function approveRequest(id) {
@@ -568,7 +574,9 @@
             renderApproved();
             if (adminUnlocked) renderPendingPanel();
             showMessage(`${approved.name} est désormais certifié !`);
-        } else showMessage("Erreur", true);
+        } else {
+            showMessage("Erreur: demande introuvable", true);
+        }
     }
 
     function rejectRequest(id) {
@@ -579,7 +587,9 @@
             localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
             if (adminUnlocked) renderPendingPanel();
             showMessage(`Demande de ${nameRej} refusée.`, true);
-        } else showMessage("Introuvable", true);
+        } else {
+            showMessage("Demande introuvable", true);
+        }
     }
 
     window.openAdminMystic = function() {
@@ -589,7 +599,9 @@
             document.getElementById("adminMysticPanel").classList.add("show");
             renderPendingPanel();
             showMessage("Accès Admin accordé.");
-        } else if (code !== null) showMessage("Code invalide.", true);
+        } else if (code !== null) {
+            showMessage("Code invalide.", true);
+        }
     };
 
     // MUSIQUE
