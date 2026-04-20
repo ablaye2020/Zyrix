@@ -309,7 +309,7 @@
         .approve-mystic {
             background: #2a6e4a;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 30px;
             color: white;
             font-weight: bold;
@@ -319,12 +319,16 @@
         .reject-mystic {
             background: #9b2a4a;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 30px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             margin: 3px;
+        }
+        .approve-mystic:hover, .reject-mystic:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
         }
 
         .footer-purge {
@@ -421,7 +425,9 @@
     <div class="admin-lock-btn" onclick="openAdminMystic()">🔐 ACCÈS GARDIEN</div>
     <div id="adminMysticPanel" class="admin-panel-mystic">
         <h4 style="color:#e6678a; margin-bottom:15px;">📜 DEMANDES EN ATTENTE</h4>
-        <div id="pendingRequestsList">Chargement...</div>
+        <div id="pendingRequestsList">
+            <div style="text-align:center; padding:20px;">Chargement...</div>
+        </div>
     </div>
 </div>
 
@@ -429,8 +435,21 @@
 
 <script>
     // ========== DONNÉES ==========
-    let pendingRequests = JSON.parse(localStorage.getItem("zyph_pending_mystic")) || [];
-    let approvedMembers = JSON.parse(localStorage.getItem("zyph_approved_mystic")) || [];
+    let pendingRequests = [];
+    let approvedMembers = [];
+
+    function loadData() {
+        pendingRequests = JSON.parse(localStorage.getItem("zyph_pending_mystic")) || [];
+        approvedMembers = JSON.parse(localStorage.getItem("zyph_approved_mystic")) || [];
+    }
+
+    function savePending() {
+        localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
+    }
+
+    function saveApproved() {
+        localStorage.setItem("zyph_approved_mystic", JSON.stringify(approvedMembers));
+    }
 
     function showMessage(msg, isErr = false) {
         let t = document.getElementById("toastMsg");
@@ -492,12 +511,16 @@
                 timestamp: Date.now()
             };
             pendingRequests.push(newReq);
-            localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
+            savePending();
             showMessage("Candidature envoyée ! L'admin examinera.");
             document.getElementById("recruitName").value = "";
             document.getElementById("recruitTag").value = "";
             document.getElementById("recruitPhoto").value = "";
-            if (adminUnlocked) renderPendingPanel();
+            
+            // Si le panneau admin est ouvert, le rafraîchir
+            if (adminUnlocked && document.getElementById("adminMysticPanel").classList.contains("show")) {
+                renderPendingPanel();
+            }
         };
         reader.readAsDataURL(file);
     };
@@ -507,57 +530,39 @@
     function renderPendingPanel() {
         const container = document.getElementById("pendingRequestsList");
         if (!container) return;
+        
+        loadData();
+        
         if (pendingRequests.length === 0) {
-            container.innerHTML = `<div style="padding:12px; text-align:center;">✨ Aucune recrue en attente ✨</div>`;
+            container.innerHTML = `<div style="padding:20px; text-align:center;">✨ Aucune recrue en attente ✨</div>`;
             return;
         }
+        
         container.innerHTML = "";
         pendingRequests.forEach(req => {
             const mins = Math.floor((Date.now() - req.timestamp) / 60000);
-            const ago = mins < 60 ? mins + "min" : Math.floor(mins / 60) + "h";
+            const ago = mins < 60 ? mins + " min" : Math.floor(mins / 60) + " h";
             const div = document.createElement("div");
             div.className = "pending-mystic-item";
-            div.setAttribute("data-req-id", req.id);
+            div.setAttribute("data-id", req.id);
             div.innerHTML = `
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <img src="${req.photo}" width="48" height="48" style="border-radius:50%; border:2px solid #e6678a;">
+                    <img src="${req.photo}" width="48" height="48" style="border-radius:50%; border:2px solid #e6678a; object-fit:cover;">
                     <div>
                         <strong>${escapeHtml(req.name)}</strong><br>
-                        <span style="font-size:10px;">${escapeHtml(req.tag)} • ${ago}</span>
+                        <span style="font-size:10px;">${escapeHtml(req.tag)} • il y a ${ago}</span>
                     </div>
                 </div>
-                <div>
-                    <button class="approve-mystic" data-id="${req.id}">✔ Approuver</button>
-                    <button class="reject-mystic" data-id="${req.id}">✘ Rejeter</button>
+                <div style="margin-top:8px; width:100%; display:flex; justify-content:flex-end; gap:8px;">
+                    <button class="approve-mystic" onclick="approveRequest(${req.id})">✔ Approuver</button>
+                    <button class="reject-mystic" onclick="rejectRequest(${req.id})">✘ Rejeter</button>
                 </div>
             `;
             container.appendChild(div);
         });
-
-        // Attacher les événements après avoir créé les éléments
-        document.querySelectorAll(".approve-mystic").forEach(btn => {
-            btn.removeEventListener("click", handleApprove);
-            btn.addEventListener("click", handleApprove);
-        });
-        document.querySelectorAll(".reject-mystic").forEach(btn => {
-            btn.removeEventListener("click", handleReject);
-            btn.addEventListener("click", handleReject);
-        });
     }
 
-    function handleApprove(e) {
-        e.stopPropagation();
-        let id = parseInt(e.currentTarget.getAttribute("data-id"));
-        approveRequest(id);
-    }
-
-    function handleReject(e) {
-        e.stopPropagation();
-        let id = parseInt(e.currentTarget.getAttribute("data-id"));
-        rejectRequest(id);
-    }
-
-    function approveRequest(id) {
+    window.approveRequest = function(id) {
         const index = pendingRequests.findIndex(r => r.id === id);
         if (index !== -1) {
             const approved = pendingRequests[index];
@@ -568,37 +573,38 @@
                 photo: approved.photo,
                 timestamp: approved.timestamp
             });
-            localStorage.setItem("zyph_approved_mystic", JSON.stringify(approvedMembers));
+            saveApproved();
             pendingRequests.splice(index, 1);
-            localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
+            savePending();
             renderApproved();
-            if (adminUnlocked) renderPendingPanel();
+            renderPendingPanel();
             showMessage(`${approved.name} est désormais certifié !`);
         } else {
             showMessage("Erreur: demande introuvable", true);
         }
-    }
+    };
 
-    function rejectRequest(id) {
+    window.rejectRequest = function(id) {
         const idx = pendingRequests.findIndex(r => r.id === id);
         if (idx !== -1) {
             let nameRej = pendingRequests[idx].name;
             pendingRequests.splice(idx, 1);
-            localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
-            if (adminUnlocked) renderPendingPanel();
+            savePending();
+            renderPendingPanel();
             showMessage(`Demande de ${nameRej} refusée.`, true);
         } else {
             showMessage("Demande introuvable", true);
         }
-    }
+    };
 
     window.openAdminMystic = function() {
         let code = prompt("⌨️ CODE D'ACCÈS :");
         if (code === "2211") {
             adminUnlocked = true;
+            loadData();
             document.getElementById("adminMysticPanel").classList.add("show");
             renderPendingPanel();
-            showMessage("Accès Admin accordé.");
+            showMessage("Accès Admin accordé. Vous voyez les recrues en attente.");
         } else if (code !== null) {
             showMessage("Code invalide.", true);
         }
@@ -646,8 +652,13 @@
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
     }
 
+    // INITIALISATION
+    loadData();
     renderApproved();
-    setInterval(renderApproved, 30000);
+    setInterval(() => {
+        loadData();
+        renderApproved();
+    }, 30000);
 </script>
 </body>
 </html>
