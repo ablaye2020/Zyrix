@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ZYPHERON | PURGE & ÉLITE</title>
+    <title>ZYPHERON | Sanctuaire Élite</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,7 @@
             overflow-x: hidden;
         }
 
-        /* FOND MYSTIQUE SOMBRE + REFLETS POURPRES */
+        /* FOND MYSTIQUE SOMBRE */
         .mystic-bg {
             position: fixed;
             top: 0;
@@ -67,8 +67,8 @@
             100% { transform: translateY(-70px) translateX(40px); opacity: 0.5; }
         }
 
-        /* HEADER STYLE PURGE */
-        .purge-header {
+        /* HEADER */
+        .elite-header {
             text-align: center;
             padding: 35px 20px;
             background: linear-gradient(145deg, #0e0308cc, #1f0a12cc);
@@ -78,7 +78,7 @@
             position: relative;
             z-index: 10;
         }
-        .purge-header h1 {
+        .elite-header h1 {
             font-size: 2.8rem;
             letter-spacing: 5px;
             background: linear-gradient(135deg, #f3c3b0, #e6678a);
@@ -88,7 +88,7 @@
             text-shadow: 0 0 18px #b82b5e;
             font-weight: 800;
         }
-        .purge-header p {
+        .elite-header p {
             color: #e6a0b5;
             font-weight: 500;
             letter-spacing: 1px;
@@ -267,7 +267,7 @@
             transform: scale(1.01);
         }
 
-        /* PANEL ADMIN CACHÉ STYLE MYSTIQUE */
+        /* PANEL ADMIN CACHÉ */
         .admin-lock-secret {
             position: fixed;
             bottom: 22px;
@@ -388,16 +388,16 @@
 <div class="purple-smoke"></div>
 <div class="mystic-dust" id="mysticDust"></div>
 
-<header class="purge-header">
-    <h1>◈ EMPEREUR DE LA PURGE ◈</h1>
-    <p>SUPRÊME DESTRUCTOR • ZYPHERON ÉLITE</p>
+<header class="elite-header">
+    <h1>◈ ZYPHERON FAMILY ◈</h1>
+    <p>L'élite recrute — honneur, puissance, fraternité</p>
 </header>
 
 <div class="music-section">
     <audio id="bgmusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
     </audio>
-    <button class="neon-btn" onclick="toggleMusic()">🎧 ACTIVER L'HÉRITAGE</button>
+    <button class="neon-btn" onclick="toggleMusic()">🎧 ACTIVER L'HYMNE</button>
 </div>
 
 <div class="title-glow"><span>⚔️ MEMBRES CERTIFIÉS ⚔️</span></div>
@@ -409,17 +409,17 @@
     <input type="text" id="recruitTag" placeholder="Tag ZYPHERON (ex: Zyph_Shadow)">
     <input type="file" id="recruitPhoto" accept="image/*">
     <button class="submit-dark" onclick="applyRecruitment()">⚡ POSTULER À L'ÉLITE ⚡</button>
-    <p style="font-size: 12px; margin-top: 15px; color: #e6a0b5;">L'Empereur examine les âmes. Seuls les élus sont certifiés.</p>
+    <p style="font-size: 12px; margin-top: 15px; color: #e6a0b5;">L'admin examine ta demande. Seuls les élus sont certifiés.</p>
 </div>
 
 <footer class="footer-purge">
-    <h3 style="color: #e6678a;">🌑 CHEMINS DE LA PUISSANCE</h3>
+    <h3 style="color: #e6678a;">🌐 CHEMINS OFFICIELS</h3>
     <div class="group-links-dark">
         <div class="group-dark-card"><a href="https://chat.whatsapp.com/FChwYx3MpiX1INrGohs32z?mode=gi_t" target="_blank">🔥 Premier Bataillon</a></div>
         <div class="group-dark-card"><a href="https://chat.whatsapp.com/BxoWBg7e5BaGk3tE3vHAxU?mode=gi_t" target="_blank">⚔️ Second Cercle</a></div>
         <div class="group-dark-card"><a href="https://whatsapp.com/channel/0029Vb7SUonEQIakXjOf7h3V" target="_blank">📢 Voie Officielle</a></div>
     </div>
-    <p style="margin-top: 16px;">📞 Commandement Suprême : <strong style="color:#e68bb0;">+923108743476</strong></p>
+    <p style="margin-top: 16px;">📞 Commandement : <strong style="color:#e68bb0;">+923108743476</strong></p>
 </footer>
 
 <div class="admin-lock-secret">
@@ -451,7 +451,7 @@
         if (!container) return;
         container.innerHTML = "";
         if (approvedMembers.length === 0) {
-            container.innerHTML = `<div style="width:100%; text-align:center; padding:40px; background:#1c0b12aa; border-radius:50px;">Aucun chevalier certifié... La Purge attend son maître.</div>`;
+            container.innerHTML = `<div style="width:100%; text-align:center; padding:40px; background:#1c0b12aa; border-radius:50px;">Aucun membre certifié pour l'instant. Rejoignez l'élite !</div>`;
             return;
         }
         approvedMembers.forEach(m => {
@@ -467,15 +467,15 @@
                         <div style="font-size:11px;">⏱️ ${hours}h d'ancienneté</div>
                     </div>
                 </div>
-                <button class="wa-dark-btn" onclick="contactLeaderMystic('${escapeHtml(m.name)}')">📞 CONTACTER L'EMPEREUR</button>
+                <button class="wa-dark-btn" onclick="contactLeader('${escapeHtml(m.name)}')">📞 CONTACTER LE COMMANDANT</button>
             `;
             container.appendChild(card);
         });
     }
 
-    window.contactLeaderMystic = function(name) {
+    window.contactLeader = function(name) {
         let phone = "923108743476";
-        let msg = `Honneur, Suprême Destructor ! ${name} (ZYPHERON certifié) se tient prêt pour la Purge.`;
+        let msg = `Honneur Chef ! ${name} (ZYPHERON certifié) se tient prêt.`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
@@ -498,7 +498,7 @@
             };
             pendingRequests.push(newReq);
             localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
-            showMessage("Candidature envoyée à l'Empereur.");
+            showMessage("Candidature envoyée ! L'admin examinera.");
             document.getElementById("recruitName").value = "";
             document.getElementById("recruitTag").value = "";
             document.getElementById("recruitPhoto").value = "";
@@ -567,7 +567,7 @@
             localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
             renderApproved();
             if (adminUnlocked) renderPendingPanel();
-            showMessage(`${approved.name} rejoint l'Élite !`);
+            showMessage(`${approved.name} est désormais certifié !`);
         } else showMessage("Erreur", true);
     }
 
@@ -578,17 +578,17 @@
             pendingRequests.splice(idx, 1);
             localStorage.setItem("zyph_pending_mystic", JSON.stringify(pendingRequests));
             if (adminUnlocked) renderPendingPanel();
-            showMessage(`${nameRej} rejeté de la Purge.`, true);
+            showMessage(`Demande de ${nameRej} refusée.`, true);
         } else showMessage("Introuvable", true);
     }
 
     window.openAdminMystic = function() {
-        let code = prompt("⌨️ CODE DU DESTRUCTOR :");
+        let code = prompt("⌨️ CODE D'ACCÈS :");
         if (code === "2211") {
             adminUnlocked = true;
             document.getElementById("adminMysticPanel").classList.add("show");
             renderPendingPanel();
-            showMessage("Accès Gardien Suprême accordé.");
+            showMessage("Accès Admin accordé.");
         } else if (code !== null) showMessage("Code invalide.", true);
     };
 
@@ -611,7 +611,7 @@
         }
     }, { once: true });
 
-    // Particules mystiques
+    // PARTICULES MYSTIQUES
     function createMysticParticles() {
         const cont = document.getElementById("mysticDust");
         for (let i = 0; i < 50; i++) {
