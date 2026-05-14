@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ZYPHERON | Recrutement Élite</title>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOY BOY - إبلاغ واتساب | Multi-Emails</title>
     <style>
         * {
             margin: 0;
@@ -15,551 +12,453 @@
         }
 
         body {
-            background: #0a0508;
-            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
-            color: #f0e0d0;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
             min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e, #0a1a2a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
             position: relative;
         }
 
-        /* Effet fond mystérieux */
-        .bg-mystic {
+        /* Image de fond Luffy */
+        body::before {
+            content: "";
             position: fixed;
-            inset: 0;
-            background: radial-gradient(ellipse at 30% 20%, #1a0b12 0%, #050103 95%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://wallpapercave.com/wp/wp6603742.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
             z-index: -2;
         }
-        .smoke {
+
+        body::after {
+            content: "";
             position: fixed;
-            inset: 0;
-            background: repeating-radial-gradient(circle at 40% 50%, rgba(150, 30, 70, 0.15), rgba(30, 5, 20, 0.4) 100px);
-            filter: blur(50px);
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
             z-index: -1;
         }
 
-        h1 { text-align: center; font-size: 2rem; color: #e6678a; margin-bottom: 5px; text-shadow: 0 0 15px #e6678a; letter-spacing: 3px; }
-        .sous-titre { text-align: center; color: #c97a95; margin-bottom: 30px; font-size: 0.85rem; }
-
-        /* Membres certifiés */
-        .section-title { text-align: center; margin: 30px 0 20px; }
-        .section-title span { background: #1f0a14; padding: 8px 30px; border-radius: 50px; font-size: 1.3rem; border: 1px solid #c74b72; }
-        .members-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-bottom: 40px; }
-        .member-card {
-            background: rgba(31, 10, 20, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid #c74b72;
-            border-radius: 28px;
-            padding: 20px;
-            width: 280px;
-            text-align: center;
+        .container {
+            background: linear-gradient(145deg, rgba(25,35,55,0.95), rgba(15,25,45,0.98));
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 40px 35px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,200,100,0.2);
+            border: 1px solid rgba(255,180,80,0.3);
             transition: 0.3s;
         }
-        .member-card:hover { transform: translateY(-5px); border-color: #e6678a; box-shadow: 0 0 20px rgba(230, 103, 138, 0.3); }
-        .member-card img { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 3px solid #e6678a; margin-bottom: 10px; }
-        .member-card h3 { font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .badge { background: #1e88e5; padding: 3px 12px; border-radius: 30px; font-size: 0.65rem; font-weight: bold; }
-        .tag { color: #c97a95; font-size: 0.8rem; margin: 8px 0; }
-        .wa-btn {
-            background: #25D366;
-            border: none;
-            padding: 10px;
-            border-radius: 40px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 12px;
-            transition: 0.2s;
-        }
-        .wa-btn:hover { background: #128C7E; color: white; }
 
-        /* Formulaire */
-        .form-container {
-            background: rgba(31, 10, 20, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 35px;
-            padding: 30px;
-            max-width: 550px;
-            margin: 0 auto 40px;
-            border: 1px solid #c74b72;
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 8px;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #FFD700, #FF8C00, #FF4500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255,100,0,0.4);
+            letter-spacing: 2px;
         }
-        .form-container h3 { text-align: center; margin-bottom: 20px; color: #e6678a; }
-        .form-container input {
+
+        .sous-titre {
+            text-align: center;
+            color: #FFD966;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            border-bottom: 2px dashed #FFA50055;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 8px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #FF660022, #FF330022);
+            border-right: 5px solid #FFA500;
+            padding: 12px 18px;
+            border-radius: 24px;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            color: #FFDDAA;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #FFD966;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
             width: 100%;
-            padding: 14px 20px;
-            margin: 10px 0;
-            border-radius: 50px;
-            border: none;
-            background: #2d1520;
+            padding: 14px 18px;
+            background: #0E1622;
+            border: 1px solid #FFA50055;
+            border-radius: 30px;
             color: white;
             font-size: 1rem;
-        }
-        .form-container input:focus { outline: none; border: 1px solid #e6678a; }
-        .form-container button {
-            background: #a1224e;
-            border: none;
-            padding: 14px;
-            border-radius: 50px;
-            width: 100%;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 15px;
             transition: 0.2s;
+            outline: none;
+            font-family: 'Cairo', monospace;
         }
-        .form-container button:hover { background: #c73566; transform: scale(1.01); }
-        .small-note { font-size: 12px; margin-top: 15px; opacity: 0.7; text-align: center; }
 
-        /* Admin Panel - Popup élégant */
-        .admin-trigger {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2a0a15;
-            border: 1px solid #e6678a;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            z-index: 200;
-            transition: 0.2s;
+        input:focus, select:focus {
+            border-color: #FFB347;
+            box-shadow: 0 0 12px rgba(255,180,70,0.4);
+            background: #1a1f2e;
         }
-        .admin-trigger:hover { background: #3d1422; transform: scale(1.02); }
-        
-        .admin-panel {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 400px;
-            max-height: 550px;
-            overflow-y: auto;
-            background: #14070ed9;
-            backdrop-filter: blur(20px);
-            border: 1px solid #e6678a;
-            border-radius: 25px;
+
+        select {
+            cursor: pointer;
+        }
+
+        /* Section multi-emails avec cases à cocher */
+        .emails-section {
+            background: #0A0E18;
+            border-radius: 28px;
             padding: 18px;
-            display: none;
-            z-index: 200;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-top: 20px;
+            border: 1px solid #FFA50033;
         }
-        .admin-panel.show { display: block; }
-        .admin-panel h4 { color: #e6678a; margin-bottom: 15px; text-align: center; border-bottom: 1px solid #c74b72; padding-bottom: 8px; }
-        .admin-panel h5 { color: #c97a95; margin: 15px 0 10px; font-size: 0.9rem; }
-        
-        .request-card {
-            background: #1f0b14;
-            border-radius: 20px;
-            padding: 12px;
+
+        .emails-title {
+            color: #FFB347;
+            font-size: 0.85rem;
             margin-bottom: 12px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
-        .request-info { display: flex; gap: 12px; align-items: center; }
-        .request-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid #e6678a; }
-        .request-actions button {
-            margin: 3px;
-            padding: 6px 12px;
-            border-radius: 25px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.75rem;
-        }
-        .approve { background: #2a6e4a; color: white; }
-        .reject { background: #9b2a4a; color: white; }
-        .delete { background: #5a1a2a; color: #ffaaaa; }
-        
-        .member-cert-card {
-            background: #1f0b14;
-            border-radius: 20px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .member-cert-info { display: flex; gap: 10px; align-items: center; }
-        .member-cert-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .delete-cert { background: #5a1a2a; color: #ffaaaa; border: none; padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; }
 
-        .footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid #c74b72;
-            margin-top: 30px;
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .group-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 15px 0; }
-        .group-links a { color: #e6a0b5; text-decoration: none; background: #1f0a14; padding: 8px 20px; border-radius: 40px; transition: 0.2s; }
-        .group-links a:hover { background: #3d1422; }
-        
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2a6e4a;
-            padding: 12px 25px;
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: #11161f;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: #1a2130;
+        }
+
+        .checkbox-item input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #FF8C00;
+            margin: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            color: #ddd;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .checkbox-item small {
+            color: #FFA50088;
+            font-size: 0.7rem;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(95deg, #FF8C00, #FF4500);
+            border: none;
             border-radius: 50px;
             color: white;
+            font-size: 1.3rem;
             font-weight: bold;
-            opacity: 0;
-            transition: 0.3s;
-            z-index: 1000;
-            pointer-events: none;
-        }
-        .toast.show { opacity: 1; animation: fadeOut 2s forwards; }
-        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
-        
-        .loading { text-align: center; padding: 20px; color: #c97a95; }
-        .empty-msg { text-align: center; padding: 20px; color: #c97a95; font-style: italic; }
-        
-        .close-panel {
-            text-align: right;
             cursor: pointer;
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: #e6678a;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(255,69,0,0.4);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            background: linear-gradient(95deg, #FFA033, #FF6622);
+            box-shadow: 0 12px 28px rgba(255,69,0,0.6);
+        }
+
+        .preview-area {
+            margin-top: 25px;
+            background: #0A0E18;
+            border-radius: 28px;
+            padding: 18px;
+            border: 1px solid #FFA50033;
+        }
+
+        .preview-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #FFB347;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .arabic-message {
+            background: #11161f;
+            padding: 15px;
+            border-radius: 20px;
+            font-family: 'Cairo', monospace;
+            font-size: 0.9rem;
+            color: #FFE4B5;
+            margin-top: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-right: 3px solid #FF8C00;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.7;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 20px;
+        }
+
+        .luffy-credit {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #FFAA55;
+        }
+
+        .selected-count {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #FFA500;
         }
     </style>
 </head>
 <body>
 
-<div class="bg-mystic"></div>
-<div class="smoke"></div>
-
-<h1>◈ ZYPHERON FAMILY ◈</h1>
-<p class="sous-titre">L'élite recrute — honneur, puissance, fraternité</p>
-
-<div style="text-align: center; margin-bottom: 20px;">
-    <span style="background: #a1224e; padding: 5px 20px; border-radius: 30px; font-size: 0.8rem;">🔥 RECRUTEMENT OFFICIEL 🔥</span>
-</div>
-
-<div class="section-title"><span>⚔️ MEMBRES CERTIFIÉS ⚔️</span></div>
-<div class="members-grid" id="membersGrid">
-    <div class="loading">Chargement des membres...</div>
-</div>
-
-<div class="form-container">
-    <h3>📝 SOUMETTRE SA CANDIDATURE</h3>
-    <input type="text" id="nom" placeholder="Nom de guerre">
-    <input type="text" id="tag" placeholder="Tag ZYPHERON (ex: Zyph_Shadow)">
-    <input type="file" id="photo" accept="image/*">
-    <button onclick="postuler()">⚡ POSTULER À L'ÉLITE ⚡</button>
-    <p class="small-note">L'admin examine ta demande. Seuls les élus sont certifiés.</p>
-</div>
-
-<footer class="footer">
-    <h3 style="color: #e6678a;">🌐 CHEMINS OFFICIELS</h3>
-    <div class="group-links">
-        <a href="https://chat.whatsapp.com/FChwYx3MpiX1INrGohs32z?mode=gi_t" target="_blank">🔥 Premier Bataillon</a>
-        <a href="https://chat.whatsapp.com/BxoWBg7e5BaGk3tE3vHAxU?mode=gi_t" target="_blank">⚔️ Second Cercle</a>
-        <a href="https://whatsapp.com/channel/0029Vb7SUonEQIakXjOf7h3V" target="_blank">📢 Voie Officielle</a>
+<div class="container">
+    <h1>⚡ جوي بوي ⚡<br><span style="font-size:1.2rem;">JOY BOY</span></h1>
+    <div style="text-align: center;">
+        <span class="sous-titre">إبلاغ رسمي - واتساب</span>
     </div>
-    <p style="margin-top: 15px;">📞 Commandement : <strong style="color:#e68bb0;">+923108743476</strong></p>
-</footer>
 
-<div class="admin-trigger" onclick="ouvrirAdmin()">🔐 ACCÈS GARDIEN</div>
-<div id="adminPanel" class="admin-panel">
-    <div class="close-panel" onclick="fermerAdmin()">✖</div>
-    <h4>📜 PANEL ADMINISTRATEUR</h4>
-    <h5>📋 Demandes en attente</h5>
-    <div id="pendingList">Chargement...</div>
-    <h5>✅ Membres certifiés</h5>
-    <div id="adminMembersList">Chargement...</div>
+    <div class="info-box">
+        📢 إرسال إلى عدة جهات · اختر الوجهات أدناه
+    </div>
+
+    <label>📞 الرقم المستهدف (مع مفتاح الدولة)</label>
+    <input type="tel" id="numero" placeholder="+223XXXXXXXXX أو +33XXXXXXXXX" value="+223">
+
+    <label>⚠️ سبب الإبلاغ</label>
+    <select id="motif">
+        <option value="احتيال">💰 احتيال / نصب</option>
+        <option value="تحرش خطير">🗣️ تحرش خطير</option>
+        <option value="رسائل مزعجة">📨 سبام / إزعاج</option>
+        <option value="انتحال شخصية">🎭 انتحال هوية</option>
+        <option value="تهديد / محتوى محظور">🔞 تهديد / محتوى غير قانوني</option>
+    </select>
+
+    <!-- Section emails multiples -->
+    <div class="emails-section">
+        <div class="emails-title">
+            📧 إرسال إلى (اختر واحداً أو أكثر)
+        </div>
+        <div class="checkbox-group">
+            <div class="checkbox-item">
+                <input type="checkbox" id="email_abuse" value="abuse@support.whatsapp.com" checked>
+                <label for="email_abuse">📱 abuse@support.whatsapp.com <small>(واتساب العالمي)</small></label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="email_wa_fr" value="wa-france@support.whatsapp.com">
+                <label for="email_wa_fr">🇫🇷 wa-france@support.whatsapp.com <small>(فرنسا)</small></label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="email_abuse_meta" value="abuse@fb.com">
+                <label for="email_abuse_meta">🛡️ abuse@fb.com <small>(ميتا - فيسبوك)</small></label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="email_signal_spam" value="signal@signal-spam.fr">
+                <label for="email_signal_spam">📢 signal@signal-spam.fr <small>(سبام فرنسا)</small></label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="email_pharos" value="pharos@interieur.gouv.fr">
+                <label for="email_pharos">⚖️ pharos@interieur.gouv.fr <small>(شرطة الانترنت - جرائم)</small></label>
+            </div>
+        </div>
+        <div class="selected-count" id="selectedCount">✅ تم اختيار 1 جهة</div>
+    </div>
+
+    <button id="reporterBtn">📢 إرسال الإبلاغ إلى البريد الإلكتروني</button>
+
+    <div class="preview-area">
+        <div class="preview-label">✉️ نص الإبلاغ (سيتم فتح البريد تلقائياً)</div>
+        <div class="arabic-message" id="messagePreview">
+            (أدخل الرقم والسبب)
+        </div>
+    </div>
+    <div class="footer-note">
+        🔒 إبلاغ واحد حقيقي لكل رقم · الإبلاغ الجماعي المزيف غير قانوني
+    </div>
+    <div class="luffy-credit">
+        🏴‍☠️ روح جوي بوي - لوفي يحمي العدالة 🏴‍☠️
+    </div>
 </div>
-<div id="toast" class="toast">✅ Succès</div>
 
 <script>
-    // ========== CONFIGURATION FIREBASE (ta config) ==========
-    const firebaseConfig = {
-        apiKey: "AIzaSyAORyJX3D55rblmqmzx-X4Bnf4IPgiQwXc",
-        authDomain: "spam-b59e9.firebaseapp.com",
-        projectId: "spam-b59e9",
-        storageBucket: "spam-b59e9.firebasestorage.app",
-        messagingSenderId: "945613423224",
-        appId: "1:945613423224:web:ee277214ae21b477d5238d",
-        measurementId: "G-41QF5GGRZ7"
-    };
-    // =========================================================
+    const numeroInput = document.getElementById('numero');
+    const motifSelect = document.getElementById('motif');
+    const previewDiv = document.getElementById('messagePreview');
+    const reporterBtn = document.getElementById('reporterBtn');
+    const selectedCountSpan = document.getElementById('selectedCount');
+    
+    // Liste des checkboxes email
+    const checkboxes = [
+        document.getElementById('email_abuse'),
+        document.getElementById('email_wa_fr'),
+        document.getElementById('email_abuse_meta'),
+        document.getElementById('email_signal_spam'),
+        document.getElementById('email_pharos')
+    ];
 
-    // Initialisation Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    let adminMode = false;
-
-    function showMessage(msg, isError = false) {
-        let toast = document.getElementById("toast");
-        toast.style.background = isError ? "#9b2a4a" : "#2a6e4a";
-        toast.innerText = isError ? "❌ " + msg : "✅ " + msg;
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 2000);
+    function getSelectedEmails() {
+        return checkboxes.filter(cb => cb.checked).map(cb => cb.value);
     }
 
-    function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
-    }
-
-    // ========== AFFICHER MEMBRES CERTIFIÉS (public) ==========
-    async function chargerMembresCertifies() {
-        const container = document.getElementById("membersGrid");
-        container.innerHTML = '<div class="loading">Chargement...</div>';
-        
-        try {
-            const snapshot = await db.collection("membres").get();
-            container.innerHTML = "";
-            
-            if (snapshot.empty) {
-                container.innerHTML = '<div class="empty-msg">Aucun membre certifié pour l\'instant.</div>';
-                return;
-            }
-            
-            snapshot.forEach(doc => {
-                const m = doc.data();
-                const heures = Math.floor((Date.now() - m.timestamp) / 3600000);
-                const card = document.createElement("div");
-                card.className = "member-card";
-                card.innerHTML = `
-                    <img src="${m.photo}" onerror="this.src='https://via.placeholder.com/85'">
-                    <h3>${escapeHtml(m.nom)} <span class="badge">✔ CERTIFIÉ</span></h3>
-                    <div class="tag">${escapeHtml(m.tag)}</div>
-                    <div style="font-size:11px;">⏱️ ${heures}h d'ancienneté</div>
-                    <button class="wa-btn" onclick="contacterCommandant('${escapeHtml(m.nom)}')">📞 CONTACTER LE COMMANDANT</button>
-                `;
-                container.appendChild(card);
-            });
-        } catch (error) {
-            console.error(error);
-            container.innerHTML = '<div class="loading">Erreur de chargement</div>';
+    function updateSelectedCount() {
+        const count = getSelectedEmails().length;
+        selectedCountSpan.innerHTML = `✅ تم اختيار ${count} جهة ${count === 0 ? '⚠️ الرجاء اختيار جهة واحدة على الأقل' : ''}`;
+        if (count === 0) {
+            selectedCountSpan.style.color = '#FF6666';
+        } else {
+            selectedCountSpan.style.color = '#FFA500';
         }
     }
 
-    window.contacterCommandant = function(nom) {
-        let phone = "923108743476";
-        let msg = `Honneur Chef ! ${nom} (ZYPHERON certifié) se tient prêt.`;
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-    };
+    function genererMessageArabe() {
+        let numero = numeroInput.value.trim();
+        let motif = motifSelect.options[motifSelect.selectedIndex]?.text || motifSelect.value;
 
-    // ========== POSTULER ==========
-    window.postuler = async function() {
-        let nom = document.getElementById("nom").value.trim();
-        let tag = document.getElementById("tag").value.trim();
-        let file = document.getElementById("photo").files[0];
+        if (!numero) {
+            return "❌ خطأ: الرجاء إدخال رقم صحيح مثل +22376123456";
+        }
+        if (!numero.startsWith('+')) {
+            numero = '+' + numero;
+        }
+
+        const date = new Date().toLocaleDateString('ar-EG');
         
-        if (!nom || !tag || !file) {
-            showMessage("Tous les champs sont requis", true);
+        return `الموضوع: بلاغ عاجل - ${motif} - واتساب
+
+إلى فريق دعم واتساب / الجهات المختصة،
+
+السلام عليكم، أنا شريف غاضب جدا وأطلب منكم التحرك فوراً.
+
+الرقم المخالف: ${numero}
+
+السبب: ${motif}
+
+هذا الحساب يمارس أعمالاً إجرامية:
+- يرسل رسائل احتيالية / تهديدات
+- يتحرش ويضايق الناس بدون سبب
+- أنا لست آمناً مع استمرار هذا الشخص
+
+أرفق لكم لقطة شاشة كدليل. أطلب منكم حظر هذا الرقم فوراً لحماية المستخدمين الشرفاء.
+
+أريد العدالة الآن.
+
+شكراً لكم
+رجل حقيقي تعرض للإيذاء
+${date}`;
+    }
+
+    function mettreAJourApercu() {
+        previewDiv.innerText = genererMessageArabe();
+    }
+
+    function envoyerEmail() {
+        let numero = numeroInput.value.trim();
+        let motif = motifSelect.options[motifSelect.selectedIndex]?.text || motifSelect.value;
+        
+        if (!numero) {
+            alert("⚠️ الرجاء إدخال رقم الهاتف قبل الإرسال");
             return;
         }
         
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            try {
-                await db.collection("demandes").add({
-                    nom: nom,
-                    tag: tag,
-                    photo: e.target.result,
-                    timestamp: Date.now(),
-                    statut: "en_attente"
-                });
-                showMessage("Candidature envoyée ! L'admin examinera.");
-                document.getElementById("nom").value = "";
-                document.getElementById("tag").value = "";
-                document.getElementById("photo").value = "";
-                if (adminMode) {
-                    chargerDemandes();
-                    chargerAdminMembers();
-                }
-            } catch (error) {
-                showMessage("Erreur lors de l'envoi", true);
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // ========== ADMIN : CHARGER LES DEMANDES ==========
-    async function chargerDemandes() {
-        const container = document.getElementById("pendingList");
-        if (!container) return;
-        container.innerHTML = '<div class="loading">Chargement...</div>';
-        
-        try {
-            const snapshot = await db.collection("demandes").get();
-            container.innerHTML = "";
-            
-            if (snapshot.empty) {
-                container.innerHTML = '<div class="empty-msg">✨ Aucune recrue en attente ✨</div>';
-                return;
-            }
-            
-            snapshot.forEach(doc => {
-                const req = doc.data();
-                const minutes = Math.floor((Date.now() - req.timestamp) / 60000);
-                const ago = minutes < 60 ? minutes + "min" : Math.floor(minutes/60) + "h";
-                const div = document.createElement("div");
-                div.className = "request-card";
-                div.innerHTML = `
-                    <div class="request-info">
-                        <img src="${req.photo}" onerror="this.src='https://via.placeholder.com/45'">
-                        <div>
-                            <strong>${escapeHtml(req.nom)}</strong><br>
-                            <span style="font-size:11px;">${escapeHtml(req.tag)} • il y a ${ago}</span>
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        <button class="approve" onclick="approuver('${doc.id}', '${escapeHtml(req.nom)}', '${escapeHtml(req.tag)}', '${req.photo}', ${req.timestamp})">✔ Approuver</button>
-                        <button class="reject" onclick="rejeter('${doc.id}', '${escapeHtml(req.nom)}')">✘ Rejeter</button>
-                        <button class="delete" onclick="supprimerDemande('${doc.id}', '${escapeHtml(req.nom)}')">🗑 Supprimer</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        } catch (error) {
-            container.innerHTML = '<div class="loading">Erreur</div>';
+        const selectedEmails = getSelectedEmails();
+        if (selectedEmails.length === 0) {
+            alert("⚠️ الرجاء اختيار جهة إرسال واحدة على الأقل");
+            return;
         }
+        
+        if (!numero.startsWith('+')) {
+            numero = '+' + numero;
+        }
+        
+        const message = genererMessageArabe();
+        const sujet = `بلاغ عاجل - ${motif} - واتساب ${numero}`;
+        
+        // Joindre plusieurs emails avec des virgules (valide pour mailto)
+        const emailsString = selectedEmails.join(',');
+        const mailtoLink = `mailto:${emailsString}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(message)}`;
+        
+        // Redirection vers l'email
+        window.location.href = mailtoLink;
     }
 
-    // ========== ADMIN : CHARGER MEMBRES CERTIFIÉS (dans admin) ==========
-    async function chargerAdminMembers() {
-        const container = document.getElementById("adminMembersList");
-        if (!container) return;
-        container.innerHTML = '<div class="loading">Chargement...</div>';
-        
-        try {
-            const snapshot = await db.collection("membres").get();
-            container.innerHTML = "";
-            
-            if (snapshot.empty) {
-                container.innerHTML = '<div class="empty-msg">Aucun membre certifié</div>';
-                return;
-            }
-            
-            snapshot.forEach(doc => {
-                const m = doc.data();
-                const div = document.createElement("div");
-                div.className = "member-cert-card";
-                div.innerHTML = `
-                    <div class="member-cert-info">
-                        <img src="${m.photo}" onerror="this.src='https://via.placeholder.com/40'">
-                        <div>
-                            <strong>${escapeHtml(m.nom)}</strong><br>
-                            <span style="font-size:10px;">${escapeHtml(m.tag)}</span>
-                        </div>
-                    </div>
-                    <button class="delete-cert" onclick="supprimerMembre('${doc.id}', '${escapeHtml(m.nom)}')">🗑 Supprimer</button>
-                `;
-                container.appendChild(div);
-            });
-        } catch (error) {
-            container.innerHTML = '<div class="loading">Erreur</div>';
-        }
-    }
+    // Écouteurs
+    numeroInput.addEventListener('input', mettreAJourApercu);
+    motifSelect.addEventListener('change', mettreAJourApercu);
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            updateSelectedCount();
+            mettreAJourApercu();
+        });
+    });
+    
+    reporterBtn.addEventListener('click', () => {
+        envoyerEmail();
+        reporterBtn.style.transform = 'scale(0.97)';
+        setTimeout(() => { reporterBtn.style.transform = ''; }, 150);
+    });
 
-    // ========== APPROUVER ==========
-    window.approuver = async function(id, nom, tag, photo, timestamp) {
-        try {
-            await db.collection("membres").add({
-                nom: nom,
-                tag: tag,
-                photo: photo,
-                timestamp: timestamp,
-                statut: "certifie"
-            });
-            await db.collection("demandes").doc(id).delete();
-            showMessage(`${nom} est désormais certifié !`);
-            chargerMembresCertifies();
-            if (adminMode) {
-                chargerDemandes();
-                chargerAdminMembers();
-            }
-        } catch (error) {
-            showMessage("Erreur lors de l'approbation", true);
-        }
-    };
-
-    // ========== REJETER ==========
-    window.rejeter = async function(id, nom) {
-        try {
-            await db.collection("demandes").doc(id).delete();
-            showMessage(`Demande de ${nom} refusée.`, true);
-            if (adminMode) {
-                chargerDemandes();
-                chargerAdminMembers();
-            }
-        } catch (error) {
-            showMessage("Erreur lors du rejet", true);
-        }
-    };
-
-    // ========== SUPPRIMER UNE DEMANDE ==========
-    window.supprimerDemande = async function(id, nom) {
-        if (confirm(`Supprimer définitivement la demande de ${nom} ?`)) {
-            try {
-                await db.collection("demandes").doc(id).delete();
-                showMessage(`Demande de ${nom} supprimée.`, true);
-                if (adminMode) chargerDemandes();
-            } catch (error) {
-                showMessage("Erreur lors de la suppression", true);
-            }
-        }
-    };
-
-    // ========== SUPPRIMER UN MEMBRE CERTIFIÉ ==========
-    window.supprimerMembre = async function(id, nom) {
-        if (confirm(`⚠️ Supprimer ${nom} des membres certifiés ? Cette action est irréversible.`)) {
-            try {
-                await db.collection("membres").doc(id).delete();
-                showMessage(`${nom} a été retiré des certifiés.`, true);
-                chargerMembresCertifies();
-                if (adminMode) chargerAdminMembers();
-            } catch (error) {
-                showMessage("Erreur lors de la suppression", true);
-            }
-        }
-    };
-
-    // ========== ADMIN : OUVERTURE / FERMETURE ==========
-    window.ouvrirAdmin = function() {
-        let code = prompt("⌨️ CODE D'ACCÈS ADMIN :");
-        if (code === "2211") {
-            adminMode = true;
-            document.getElementById("adminPanel").classList.add("show");
-            chargerDemandes();
-            chargerAdminMembers();
-            showMessage("Accès Admin accordé. Vous pouvez approuver, rejeter et supprimer.");
-        } else if (code !== null) {
-            showMessage("Code invalide.", true);
-        }
-    };
-
-    window.fermerAdmin = function() {
-        document.getElementById("adminPanel").classList.remove("show");
-        adminMode = false;
-    };
-
-    // Musique d'ambiance
-    let music = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3");
-    music.loop = true;
-    let musicStarted = false;
-    window.toggleMusic = function() {
-        if (!musicStarted) { music.play(); musicStarted = true; }
-        else if (music.paused) music.play();
-        else music.pause();
-    };
-    document.body.addEventListener("click", function initMusic() {
-        if (!musicStarted) { music.play(); musicStarted = true; }
-    }, { once: true });
-
-    // Chargement initial
-    chargerMembresCertifies();
-    setInterval(chargerMembresCertifies, 30000);
+    // Initialisation
+    mettreAJourApercu();
+    updateSelectedCount();
 </script>
 </body>
 </html>
